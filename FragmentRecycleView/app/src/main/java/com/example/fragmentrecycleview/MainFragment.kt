@@ -1,10 +1,11 @@
 package com.example.fragmentrecycleview
 
+import android.content.res.Configuration
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -26,8 +27,8 @@ class MainFragment : Fragment(), RecyclerViewAdapter.Clicklistener {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         var view =  inflater.inflate(R.layout.fragment_main, container, false)
@@ -44,16 +45,16 @@ class MainFragment : Fragment(), RecyclerViewAdapter.Clicklistener {
     }
 
     private fun iItemsList() {
-        listData.add(DataModel(R.drawable.angular,"Angular","Web Application"))
-        listData.add(DataModel(R.drawable.cp,"C Programming","Embed Programming"))
-        listData.add(DataModel(R.drawable.cpp,"C++ Programming","Embed Programming"))
-        listData.add(DataModel(R.drawable.dotnet,".NET Programming","Desktop and Web Programming"))
-        listData.add(DataModel(R.drawable.java,"Java Programming","Desktop and Web Programming"))
-        listData.add(DataModel(R.drawable.magento,"Magento","Web Application Framework"))
-        listData.add(DataModel(R.drawable.nodejs,"NodeJS","Web Application Framework"))
-        listData.add(DataModel(R.drawable.python,"Python","Desktop and Web Programming"))
-        listData.add(DataModel(R.drawable.shopify,"Shopify","E-Commerce Framework"))
-        listData.add(DataModel(R.drawable.wordpress,"Wordpress","WebApplication Framewrok"))
+        listData.add(DataModel(R.drawable.angular, "Angular", "Web Application"))
+        listData.add(DataModel(R.drawable.cp, "C Programming", "Embed Programming"))
+        listData.add(DataModel(R.drawable.cpp, "C++ Programming", "Embed Programming"))
+        listData.add(DataModel(R.drawable.dotnet, ".NET Programming", "Desktop and Web Programming"))
+        listData.add(DataModel(R.drawable.java, "Java Programming", "Desktop and Web Programming"))
+        listData.add(DataModel(R.drawable.magento, "Magento", "Web Application Framework"))
+        listData.add(DataModel(R.drawable.nodejs, "NodeJS", "Web Application Framework"))
+        listData.add(DataModel(R.drawable.python, "Python", "Desktop and Web Programming"))
+        listData.add(DataModel(R.drawable.shopify, "Shopify", "E-Commerce Framework"))
+        listData.add(DataModel(R.drawable.wordpress, "Wordpress", "WebApplication Framewrok"))
     }
 
     companion object {
@@ -76,10 +77,13 @@ class MainFragment : Fragment(), RecyclerViewAdapter.Clicklistener {
     }
 
     override fun onItemClick(dataModel: DataModel) {
-        var fragment: Fragment = DetailFragment.newInstance(dataModel.itemName!!, dataModel.itemDescription!!, dataModel.image)
         val transaction = activity?.supportFragmentManager!!.beginTransaction()
-        transaction.hide(activity?.supportFragmentManager!!.findFragmentByTag("main_fragment")!!)
-        transaction.add(R.id.frame_container, fragment)
+        val orientation = this.resources.configuration.orientation
+        if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            transaction.hide(activity?.supportFragmentManager!!.findFragmentByTag("main_fragment")!!)
+        }
+        var fragment: Fragment = DetailFragment.newInstance(dataModel.itemName!!, dataModel.itemDescription!!, dataModel.image)
+        transaction.replace(R.id.frame_details, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
